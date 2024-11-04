@@ -1,6 +1,6 @@
 import { Menu, Phone, ShoppingBag, X } from "lucide-react";
 import { useState } from "react";
-import { Link, Route } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -42,11 +42,11 @@ export default function Header() {
               Contato
             </a>
             <a
-              href="tel:+5561999999999"
+              href="tel:+5561981388985"
               className="flex items-center space-x-2 bg-red-600 px-4 py-2 rounded-full hover:bg-red-700 transition"
             >
               <Phone className="h-4 w-4" />
-              <span>(61) 99999-9999</span>
+              <span>(61) 98138-8985</span>
             </a>
           </nav>
 
@@ -63,9 +63,6 @@ export default function Header() {
       {isMenuOpen && (
         <div className="md:hidden bg-black/95 absolute w-full">
           <nav className="flex flex-col space-y-4 p-4">
-            {/* <a href="#produtos" className="hover:text-red-500 transition">
-              Produtos
-            </a> */}
             <Link to="/produtos" className="hover:text-red-500 transition">
               Produtos
             </Link>

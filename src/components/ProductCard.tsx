@@ -33,7 +33,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           </span>
         </div>
         <a
-          href={`https://wa.me/5561999999999?text=Olá! Gostaria de saber mais sobre o produto: ${product.name}`}
+          href={`https://wa.me/5561981388985?text=Olá! Gostaria de saber mais sobre o produto: ${product.name}`}
           target="_blank"
           rel="noopener noreferrer"
           className="mt-4 w-full bg-black text-white py-2 rounded-full flex items-center justify-center space-x-2 hover:bg-gray-800 transition"

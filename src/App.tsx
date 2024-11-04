@@ -1,17 +1,21 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import {
+  Navigate,
   Route,
   BrowserRouter as Router,
-  Routes
+  Routes,
 } from "react-router-dom";
-import AdminPanel from "./components/AdminPanel";
+import AdminDashboard from "./components/AdminDashboard";
+import AdminLogin from "./components/AdminLogin";
 import ContactSection from "./components/ContactSection";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
 import ProductCard from "./components/ProductCard";
+import RandomProductList from "./components/RandomProductList";
 import ServiceCard from "./components/ServiceCard";
 import TestimonialCard from "./components/TestimonialCard";
+import { AdminProvider } from "./context/AdminContext";
 import { GiftRegistry } from "./page/GiftRegistry";
 import { Product, Service, Testimonial } from "./types";
 
@@ -90,11 +94,7 @@ const HomePage = () => {
           <h2 className="text-3xl font-bold text-center mb-12">
             Nossos Produtos
           </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {products.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
+          <RandomProductList products={products} />
         </div>
       </section>
 
@@ -138,7 +138,7 @@ const ProductCatalog = () => {
 
   useEffect(() => {
     axios
-      .get<Product[]>("https://reidasutilidadesbackend.onrender.com/api/produtos")
+      .get<Product[]>("http://localhost:3000/api/produtos")
       .then((response) => setProducts(response.data))
       .catch((error) => console.error("Erro ao buscar produtos:", error));
   }, []);
@@ -160,13 +160,21 @@ const ProductCatalog = () => {
 
 export default function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/produtos" element={<ProductCatalog />} />
-        <Route path="/lista-presentes" element={<GiftRegistry />} />
-        <Route path="/admin" element={<AdminPanel />} /> {/* Rota separada para o AdminPanel */}
-      </Routes>
-    </Router>
+    <AdminProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/produtos" element={<ProductCatalog />} />
+          <Route path="/lista-presentes" element={<GiftRegistry />} />
+
+          <Route
+            path="/admin"
+            element={<Navigate to="/admin/login" replace />}
+          />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/*" element={<AdminDashboard />} />
+        </Routes>
+      </Router>
+    </AdminProvider>
   );
 }
