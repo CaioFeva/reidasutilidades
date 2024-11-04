@@ -12,7 +12,7 @@ export default function ProductList() {
 
   useEffect(() => {
     axios
-      .get<Product[]>("http://localhost:3000/api/produtos")
+      .get<Product[]>("https://reidasutilidadesbackend.onrender.com/api/produtos")
       .then((response) => setProdutos(response.data))
       .catch((error) => console.error("Erro ao buscar produtos:", error));
   }, []);

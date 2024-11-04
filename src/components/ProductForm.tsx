@@ -44,7 +44,9 @@ export default function ProductForm() {
   useEffect(() => {
     if (id) {
       axios
-        .get<Product>(`http://localhost:3000/api/produto/${id}`)
+        .get<Product>(
+          `https://reidasutilidadesbackend.onrender.com/api/produto/${id}`
+        )
         .then((response) => {
           setProdutos(response.data);
           console.log("response.data", response.data);
@@ -52,7 +54,7 @@ export default function ProductForm() {
         .catch((error) => console.error("Erro ao buscar produtos:", error));
     }
   }, [id]);
-  
+
   useEffect(() => {
     if (produtos) {
       formData.name = produtos.name;
@@ -72,8 +74,8 @@ export default function ProductForm() {
     e.preventDefault();
 
     const endpoint = id
-      ? `http://localhost:3000/api/produtos/${id}`
-      : "http://localhost:3000/api/produtos";
+      ? `https://reidasutilidadesbackend.onrender.com/api/produtos/${id}`
+      : "https://reidasutilidadesbackend.onrender.com/api/produtos";
     const method = id ? "put" : "post";
 
     axios[method](endpoint, formData)
