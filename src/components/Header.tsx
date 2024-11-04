@@ -11,7 +11,12 @@ export default function Header() {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <ShoppingBag className="h-8 w-8 text-red-600" />
-            <span className="text-xl font-bold">Rei das Utilidades</span>
+            <Link
+              to="/"
+              className="text-xl font-bold hover:text-red-500 transition"
+            >
+              Rei das Utilidades
+            </Link>
           </div>
 
           <nav className="hidden md:flex items-center space-x-8">
@@ -20,6 +25,12 @@ export default function Header() {
             </a> */}
             <Link to="/produtos" className="hover:text-red-500 transition">
               Produtos
+            </Link>
+            <Link
+              to="/lista-presentes"
+              className="hover:text-red-500 transition"
+            >
+              Lista de Presentes
             </Link>
             <a href="#servicos" className="hover:text-red-500 transition">
               Serviços
@@ -52,9 +63,18 @@ export default function Header() {
       {isMenuOpen && (
         <div className="md:hidden bg-black/95 absolute w-full">
           <nav className="flex flex-col space-y-4 p-4">
-            <a href="#produtos" className="hover:text-red-500 transition">
+            {/* <a href="#produtos" className="hover:text-red-500 transition">
               Produtos
-            </a>
+            </a> */}
+            <Link to="/produtos" className="hover:text-red-500 transition">
+              Produtos
+            </Link>
+            <Link
+              to="/lista-presentes"
+              className="hover:text-red-500 transition"
+            >
+              Lista de Presentes
+            </Link>
             <a href="#servicos" className="hover:text-red-500 transition">
               Serviços
             </a>
