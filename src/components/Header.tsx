@@ -32,6 +32,7 @@ export default function Header() {
             >
               Lista de Presentes
             </Link>
+
             <a href="#servicos" className="hover:text-red-500 transition">
               Serviços
             </a>
@@ -41,6 +42,12 @@ export default function Header() {
             <a href="#contato" className="hover:text-red-500 transition">
               Contato
             </a>
+            <Link
+              to="/admin"
+              className="hover:text-red-500 transition"
+            >
+              ADIMINISTRAÇÃO
+            </Link>
             <a
               href="tel:+5561981388985"
               className="flex items-center space-x-2 bg-red-600 px-4 py-2 rounded-full hover:bg-red-700 transition"
