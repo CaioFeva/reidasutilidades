@@ -20,7 +20,7 @@ const initialFormData: ProductFormData = {
   price: 0,
   description: "",
   category: "",
-  images: [] as string[],
+  images: [],
   dimensions: "",
   weight: "",
   stock: 0,
@@ -38,7 +38,6 @@ export default function ProductForm() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [formData, setFormData] = useState<ProductFormData>(initialFormData);
-
   const [produtos, setProdutos] = useState<Product>();
 
   useEffect(() => {
@@ -47,7 +46,6 @@ export default function ProductForm() {
         .get<Product>(`${import.meta.env.VITE_API_BASE_URL}/${id}`)
         .then((response) => {
           setProdutos(response.data);
-          console.log("response.data", response.data);
         })
         .catch((error) => console.error("Erro ao buscar produtos:", error));
     }
@@ -61,16 +59,12 @@ export default function ProductForm() {
         category: produtos.category,
         dimensions: produtos.dimensions,
         description: produtos.description,
-        images: Array.isArray(produtos.images)
-          ? produtos.images
-          : [produtos.images], // Garantir que seja sempre um array
+        images: Array.isArray(produtos.images) ? produtos.images : [produtos.images],
         stock: produtos.stock,
         weight: produtos.weight,
       });
     }
   }, [produtos]);
-
-  console.log("produtos", produtos);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -80,7 +74,7 @@ export default function ProductForm() {
       : import.meta.env.VITE_API_BASE_URL;
     const method = id ? "put" : "post";
 
-    axios[method](endpoint!, formData)
+    axios[method](endpoint, formData)
       .then((response) => {
         console.log("Produto salvo com sucesso:", response.data);
         navigate("/admin/products");
@@ -97,6 +91,26 @@ export default function ProductForm() {
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleImageChange = (index: number, value: string) => {
+    const updatedImages = [...formData.images];
+    updatedImages[index] = value;
+    setFormData({ ...formData, images: updatedImages });
+  };
+
+  const addImageField = () => {
+    setFormData((prev) => ({
+      ...prev,
+      images: [...prev.images, ""],
+    }));
+  };
+
+  const removeImageField = (index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index),
+    }));
   };
 
   return (
@@ -179,17 +193,34 @@ export default function ProductForm() {
             </select>
           </div>
 
-          <div>
+          <div className="sm:col-span-2">
             <label className="block text-sm font-medium text-gray-700">
-              URL da Imagem
+              URLs das Imagens
             </label>
-            <input
-              type="url"
-              name="images"
-              value={formData.images}
-              onChange={handleChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-            />
+            {formData.images.map((image, index) => (
+              <div key={index} className="flex items-center mt-2">
+                <input
+                  type="url"
+                  value={image}
+                  onChange={(e) => handleImageChange(index, e.target.value)}
+                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeImageField(index)}
+                  className="ml-2 text-red-600 hover:text-red-800"
+                >
+                  Remover
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={addImageField}
+              className="mt-2 text-blue-600 hover:text-blue-800"
+            >
+              Adicionar URL de Imagem
+            </button>
           </div>
 
           <div>

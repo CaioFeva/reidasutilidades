@@ -4,8 +4,6 @@ import { Product } from '../types';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-// Mock data - replace with actual data from your backend
-
 
 export default function ProductList() {
   const [produtos, setProdutos] = useState<Product[]>([]);
@@ -21,9 +19,14 @@ export default function ProductList() {
 
   const navigate = useNavigate();
 
-  const handleDelete = (id: string) => {
-    // Here you would typically call your backend to delete the product
-    console.log('Delete product:', id);
+  const handleDelete = async (id: string) => {
+    try {
+      await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/${id}`);
+      setProdutos((prevProdutos) => prevProdutos.filter((produto) => produto.id !== id));
+      console.log("Produto excluído:", id);
+    } catch (error) {
+      console.error("Erro ao excluir produto:", error);
+    }
   };
 
   return (

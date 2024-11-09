@@ -20,9 +20,6 @@ export default function Header() {
           </div>
 
           <nav className="hidden md:flex items-center space-x-8">
-            {/* <a href="#produtos" className="hover:text-red-500 transition">
-              Produtos
-            </a> */}
             <Link to="/produtos" className="hover:text-red-500 transition">
               Produtos
             </Link>
@@ -33,7 +30,7 @@ export default function Header() {
               Lista de Presentes
             </Link>
 
-            <a href="#servicos" className="hover:text-red-500 transition">
+            {/* <a href="#servicos" className="hover:text-red-500 transition">
               Serviços
             </a>
             <a href="#depoimentos" className="hover:text-red-500 transition">
@@ -41,13 +38,7 @@ export default function Header() {
             </a>
             <a href="#contato" className="hover:text-red-500 transition">
               Contato
-            </a>
-            <Link
-              to="/admin"
-              className="hover:text-red-500 transition"
-            >
-              ADIMINISTRAÇÃO
-            </Link>
+            </a> */}
             <a
               href="tel:+5561981388985"
               className="flex items-center space-x-2 bg-red-600 px-4 py-2 rounded-full hover:bg-red-700 transition"
