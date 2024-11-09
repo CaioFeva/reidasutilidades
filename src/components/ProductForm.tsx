@@ -9,7 +9,7 @@ interface ProductFormData {
   price: number;
   description: string;
   category: string;
-  imageUrl: string[];
+  images: string[];
   dimensions: string;
   weight: string;
   stock: number;
@@ -20,7 +20,7 @@ const initialFormData: ProductFormData = {
   price: 0,
   description: "",
   category: "",
-  imageUrl: [],
+  images: [] as string[],
   dimensions: "",
   weight: "",
   stock: 0,
@@ -44,9 +44,7 @@ export default function ProductForm() {
   useEffect(() => {
     if (id) {
       axios
-        .get<Product>(
-          `https://reidasutilidadesbackend.onrender.com/api/produto/${id}`
-        )
+        .get<Product>(`${import.meta.env.VITE_API_BASE_URL}/${id}`)
         .then((response) => {
           setProdutos(response.data);
           console.log("response.data", response.data);
@@ -57,14 +55,18 @@ export default function ProductForm() {
 
   useEffect(() => {
     if (produtos) {
-      formData.name = produtos.name;
-      formData.price = produtos.price;
-      formData.category = produtos.category;
-      formData.dimensions = produtos.dimensions;
-      formData.description = produtos.description;
-      formData.imageUrl = produtos.images;
-      formData.stock = produtos.stock;
-      formData.weight = produtos.weight;
+      setFormData({
+        name: produtos.name,
+        price: produtos.price,
+        category: produtos.category,
+        dimensions: produtos.dimensions,
+        description: produtos.description,
+        images: Array.isArray(produtos.images)
+          ? produtos.images
+          : [produtos.images], // Garantir que seja sempre um array
+        stock: produtos.stock,
+        weight: produtos.weight,
+      });
     }
   }, [produtos]);
 
@@ -74,11 +76,11 @@ export default function ProductForm() {
     e.preventDefault();
 
     const endpoint = id
-      ? `https://reidasutilidadesbackend.onrender.com/api/produtos/${id}`
-      : "https://reidasutilidadesbackend.onrender.com/api/produtos";
+      ? `${import.meta.env.VITE_API_BASE_URL}/${id}`
+      : import.meta.env.VITE_API_BASE_URL;
     const method = id ? "put" : "post";
 
-    axios[method](endpoint, formData)
+    axios[method](endpoint!, formData)
       .then((response) => {
         console.log("Produto salvo com sucesso:", response.data);
         navigate("/admin/products");
@@ -183,8 +185,8 @@ export default function ProductForm() {
             </label>
             <input
               type="url"
-              name="imageUrl"
-              value={formData.imageUrl}
+              name="images"
+              value={formData.images}
               onChange={handleChange}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
             />

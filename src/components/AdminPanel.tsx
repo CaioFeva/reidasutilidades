@@ -47,7 +47,6 @@ export default function AdminPanel() {
 }
 
 function ProductForm() {
-  // Usamos Partial<Product> para que os campos possam ser preenchidos gradualmente
   const [product, setProduct] = useState<Partial<Product>>({
     name: "",
     description: "",
@@ -63,12 +62,10 @@ function ProductForm() {
     e.preventDefault();
 
     try {
-      // Envia o produto ao backend
-      const response = await axios.post("http://localhost:3000/api/produtos", product);
+      const response = await axios.post(import.meta.env.VITE_API_BASE_URL!, product);
       console.log("Produto salvo:", response.data);
       alert("Produto salvo com sucesso!");
 
-      // Limpar o formulário após o envio bem-sucedido
       setProduct({
         name: "",
         price: 0,

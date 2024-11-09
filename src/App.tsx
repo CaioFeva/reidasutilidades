@@ -78,7 +78,7 @@ const HomePage = () => {
   // Buscando produtos do backend quando o componente monta
   useEffect(() => {
     axios
-      .get<Product[]>("https://reidasutilidadesbackend.onrender.com/api/produtos")
+      .get<Product[]>(import.meta.env.VITE_API_BASE_URL!)
       .then((response) => setProducts(response.data))
       .catch((error) => console.error("Erro ao buscar produtos:", error));
   }, []);
@@ -138,7 +138,7 @@ const ProductCatalog = () => {
 
   useEffect(() => {
     axios
-      .get<Product[]>("https://reidasutilidadesbackend.onrender.com/api/produtos")
+      .get<Product[]>(import.meta.env.VITE_API_BASE_URL!)
       .then((response) => setProducts(response.data))
       .catch((error) => console.error("Erro ao buscar produtos:", error));
   }, []);
