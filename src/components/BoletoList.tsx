@@ -41,7 +41,7 @@ export default function BoletoList() {
     const hoje = new Date();
   
     const total = boletos
-      .filter((boleto) => new Date(boleto.duedate) > hoje)
+      .filter((boleto) => new Date(boleto.duedate) >= hoje)
       .reduce((acc, boleto) => acc + (Number(boleto.amount) || 0), 0);
   
     return parseFloat(total.toFixed(2));
