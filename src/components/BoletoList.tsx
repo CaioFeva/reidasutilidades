@@ -37,16 +37,36 @@ export default function BoletoList() {
     return matchesSearch && matchesStatus && matchesDate;
   });
 
+  function parseDateBR(dateStr: string): Date {
+    const [day, month, year] = dateStr.split("/").map(Number);
+    return new Date(year, month - 1, day); // Ajusta o mês para o padrão zero-based do JavaScript
+  }
+
   function somarBoletosAVencer(boletos: Boleto[]): number {
     const hoje = new Date();
-  
+    hoje.setHours(0, 0, 0, 0);
+
     const total = boletos
-      .filter((boleto) => new Date(boleto.duedate) >= hoje)
-      .reduce((acc, boleto) => acc + (Number(boleto.amount) || 0), 0);
-  
-    return parseFloat(total.toFixed(2));
+      .filter((boleto) => {
+        const dueDate = parseDateBR(boleto.duedate);
+        dueDate.setHours(0, 0, 0, 0);
+
+        const isDueDateValid = dueDate >= hoje;
+        const isStatusPending = boleto.status === "PENDENTE";
+
+        return isDueDateValid && isStatusPending;
+      })
+      .reduce((acc, boleto) => {
+        const amountString = String(boleto.amount)
+          .replace(/[.,]/g, "")
+          .replace(/(\d+)(\d{2})$/, "$1.$2");
+        const amount = parseFloat(amountString);
+
+        return acc + (isNaN(amount) ? 0 : amount);
+      }, 0);
+
+    return total; // Retorna como número
   }
-  
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -194,7 +214,11 @@ export default function BoletoList() {
           </table>
         </div>
         <div>
-          <h3 className="font-semibold text-lg mb-1">Total dos boletos a vencer: R$ {somarBoletosAVencer(boletos)}</h3>
+          Total dos boletos a vencer: R${" "}
+          {somarBoletosAVencer(boletos).toLocaleString("pt-BR", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}
         </div>
       </div>
     </div>
