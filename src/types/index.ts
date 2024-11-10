@@ -24,3 +24,9 @@ export interface Service {
   description: string;
   icon: string;
 }
+
+
+export interface Categoria{
+  id: string;
+  category: string;
+}

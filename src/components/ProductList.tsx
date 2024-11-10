@@ -10,7 +10,7 @@ export default function ProductList() {
 
   useEffect(() => {
     axios
-      .get<Product[]>(import.meta.env.VITE_API_BASE_URL!)
+      .get<Product[]>(import.meta.env.VITE_API_BASE_URL!+"/produtos")
       .then((response) => setProdutos(response.data))
       .catch((error) => console.error("Erro ao buscar produtos:", error));
   }, []);
@@ -21,9 +21,8 @@ export default function ProductList() {
 
   const handleDelete = async (id: string) => {
     try {
-      await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/produtos/${id}`);
       setProdutos((prevProdutos) => prevProdutos.filter((produto) => produto.id !== id));
-      console.log("Produto excluído:", id);
     } catch (error) {
       console.error("Erro ao excluir produto:", error);
     }

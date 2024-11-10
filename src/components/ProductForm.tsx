@@ -1,8 +1,9 @@
+import axios from "axios";
+import { ArrowLeft, Save } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Save, ArrowLeft } from "lucide-react";
-import axios from "axios";
 import { Product } from "../types";
+import { ModalPanel } from "./ModalPanel";
 
 interface ProductFormData {
   name: string;
@@ -26,30 +27,33 @@ const initialFormData: ProductFormData = {
   stock: 0,
 };
 
-const categories = [
-  "Eletrônicos",
-  "Roupas",
-  "Acessórios",
-  "Livros",
-  "Casa e Decoração",
-];
 
 export default function ProductForm() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [formData, setFormData] = useState<ProductFormData>(initialFormData);
   const [produtos, setProdutos] = useState<Product>();
+  const [categoria, setCategoria] = useState<string[]>([]);
 
   useEffect(() => {
     if (id) {
       axios
-        .get<Product>(`${import.meta.env.VITE_API_BASE_URL}/${id}`)
+        .get<Product>(`${import.meta.env.VITE_API_BASE_URL}/produtos/${id}`)
         .then((response) => {
           setProdutos(response.data);
         })
         .catch((error) => console.error("Erro ao buscar produtos:", error));
     }
   }, [id]);
+
+  useEffect(() => {
+    axios
+      .get<string[]>(`${import.meta.env.VITE_API_BASE_URL}/categoria`)
+      .then((response) => {
+        setCategoria(response.data);
+      })
+      .catch((error) => console.error("Erro ao buscar categorias:", error));
+  });
 
   useEffect(() => {
     if (produtos) {
@@ -59,7 +63,9 @@ export default function ProductForm() {
         category: produtos.category,
         dimensions: produtos.dimensions,
         description: produtos.description,
-        images: Array.isArray(produtos.images) ? produtos.images : [produtos.images],
+        images: Array.isArray(produtos.images)
+          ? produtos.images
+          : [produtos.images],
         stock: produtos.stock,
         weight: produtos.weight,
       });
@@ -71,7 +77,7 @@ export default function ProductForm() {
 
     const endpoint = id
       ? `${import.meta.env.VITE_API_BASE_URL}/${id}`
-      : import.meta.env.VITE_API_BASE_URL;
+      : import.meta.env.VITE_API_BASE_URL + "/produtos";
     const method = id ? "put" : "post";
 
     axios[method](endpoint, formData)
@@ -185,12 +191,15 @@ export default function ProductForm() {
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
             >
               <option value="">Selecione uma categoria</option>
-              {categories.map((category) => (
+              {categoria.map((category) => (
                 <option key={category} value={category}>
                   {category}
                 </option>
               ))}
             </select>
+            <div className="mt-1">
+              <ModalPanel />
+            </div>
           </div>
 
           <div className="sm:col-span-2">

@@ -18,6 +18,7 @@ import TestimonialCard from "./components/TestimonialCard";
 import { AdminProvider } from "./context/AdminContext";
 import { GiftRegistry } from "./page/GiftRegistry";
 import { Product, Service, Testimonial } from "./types";
+import { CartProvider } from "./components/Cart/CartContext";
 
 // Dados mockados para serviços e depoimentos
 const services: Service[] = [
@@ -78,7 +79,7 @@ const HomePage = () => {
   // Buscando produtos do backend quando o componente monta
   useEffect(() => {
     axios
-      .get<Product[]>(import.meta.env.VITE_API_BASE_URL!)
+      .get<Product[]>(import.meta.env.VITE_API_BASE_URL!+"/produtos")
       .then((response) => setProducts(response.data))
       .catch((error) => console.error("Erro ao buscar produtos:", error));
   }, []);
@@ -138,7 +139,7 @@ const ProductCatalog = () => {
 
   useEffect(() => {
     axios
-      .get<Product[]>(import.meta.env.VITE_API_BASE_URL!)
+      .get<Product[]>(import.meta.env.VITE_API_BASE_URL!+"/produtos")
       .then((response) => setProducts(response.data))
       .catch((error) => console.error("Erro ao buscar produtos:", error));
   }, []);
@@ -161,6 +162,7 @@ const ProductCatalog = () => {
 export default function App() {
   return (
     <AdminProvider>
+      <CartProvider>
       <Router>
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -175,6 +177,7 @@ export default function App() {
           <Route path="/admin/*" element={<AdminDashboard />} />
         </Routes>
       </Router>
+      </CartProvider>
     </AdminProvider>
   );
 }

@@ -62,7 +62,7 @@ function ProductForm() {
     e.preventDefault();
 
     try {
-      const response = await axios.post(import.meta.env.VITE_API_BASE_URL!, product);
+      const response = await axios.post(import.meta.env.VITE_API_BASE_URL!+"/produtos", product);
       console.log("Produto salvo:", response.data);
       alert("Produto salvo com sucesso!");
 
